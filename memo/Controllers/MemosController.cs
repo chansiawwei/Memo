@@ -9,6 +9,7 @@ using memo.Data;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace memo.Controllers
 {
     public class MemosController : Controller
@@ -18,8 +19,8 @@ namespace memo.Controllers
         private UserManager<IdentityUser> _userManager;
 
         public MemosController(ApplicationDbContext context,
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager)
+                              SignInManager<IdentityUser> signInManager,
+                             UserManager<IdentityUser> userManager)
         {
             _context = context;
             _signInManager = signInManager;
@@ -28,23 +29,18 @@ namespace memo.Controllers
         }
 
         // GET: Memos
-        //public async Task<IActionResult> Index()
-       // {
-         //   return View(await _context.Memo.ToListAsync());
-       // }
-
-       public IActionResult Index()
+        public IActionResult Index()
         {
-
+            //return View(await _context.Memo.ToListAsync());
             if (_signInManager.IsSignedIn(User))
             {
                 var id = _userManager.GetUserId(User);
-               return View(  _context.Memo.ToList().Where(m => m.OwnerId == id));
+                return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
             }
-            return NoContent();     
+            return NoContent();
+
         }
-
-
+        
         // GET: Memos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -54,7 +50,7 @@ namespace memo.Controllers
             }
 
             var memo = await _context.Memo
-                .FirstOrDefaultAsync(m => m.MemoId == id);
+                .FirstOrDefaultAsync(m => m.memoId == id);
             if (memo == null)
             {
                 return NotFound();
@@ -66,6 +62,7 @@ namespace memo.Controllers
         // GET: Memos/Create
         public IActionResult Create()
         {
+            
             return View();
         }
 
@@ -74,7 +71,7 @@ namespace memo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemoId,OwnerId,Message")] Memo memo)
+        public async Task<IActionResult> Create([Bind("memoId,OwnerId,Date,Title,Details")] Memo memo)
         {
             if (ModelState.IsValid)
             {
@@ -106,9 +103,9 @@ namespace memo.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MemoId,OwnerId,Message")] Memo memo)
+        public async Task<IActionResult> Edit(int id, [Bind("memoId,OwnerId,Date,Title,Details")] Memo memo)
         {
-            if (id != memo.MemoId)
+            if (id != memo.memoId)
             {
                 return NotFound();
             }
@@ -122,7 +119,7 @@ namespace memo.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MemoExists(memo.MemoId))
+                    if (!MemoExists(memo.memoId))
                     {
                         return NotFound();
                     }
@@ -145,7 +142,7 @@ namespace memo.Controllers
             }
 
             var memo = await _context.Memo
-                .FirstOrDefaultAsync(m => m.MemoId == id);
+                .FirstOrDefaultAsync(m => m.memoId == id);
             if (memo == null)
             {
                 return NotFound();
@@ -167,7 +164,7 @@ namespace memo.Controllers
 
         private bool MemoExists(int id)
         {
-            return _context.Memo.Any(e => e.MemoId == id);
+            return _context.Memo.Any(e => e.memoId == id);
         }
     }
 }
