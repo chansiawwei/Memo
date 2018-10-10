@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using memo.Data;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Mail;
+using System.Net;
 
 
 namespace memo.Controllers
@@ -37,7 +39,7 @@ namespace memo.Controllers
                 var id = _userManager.GetUserId(User);
                 return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
             }
-            return NoContent();
+            return View(null);
 
         }
         
@@ -161,7 +163,8 @@ namespace memo.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        
+      
         private bool MemoExists(int id)
         {
             return _context.Memo.Any(e => e.memoId == id);
