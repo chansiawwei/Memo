@@ -31,8 +31,7 @@ namespace integrationTest
         public IntegrationTest()
         {
             var builder = new WebHostBuilder()
-                //Change Root to project directory before testing
-            .UseContentRoot(@"C:\Users\Chan Siaw Wei\Desktop\sw_memo(2)\sw_memo\memo")
+            .UseContentRoot(@"D:\SWDev\sw_memo\memo")
             .UseEnvironment("Development")
                .UseStartup<Startup>();
 
@@ -46,7 +45,17 @@ namespace integrationTest
         [Fact]
         public async Task MemoHomeTestNoLogin()
         {
-            
+            /*
+            var builder = new WebHostBuilder()
+                .UseContentRoot(@"D:\SWDev\sw_memo\memo")
+                .UseEnvironment("Development")
+                   .UseStartup<Startup>();
+
+
+            var server = new TestServer(builder);
+
+            var client = server.CreateClient();
+            */
 
             var response = await client.GetAsync("/");
 
@@ -57,7 +66,7 @@ namespace integrationTest
             Assert.Contains("Please login or register to see list of memos.", responseString);
         }
 
-      /*
+      
         [Fact]
         public async Task LoginTest()
         {
@@ -139,7 +148,6 @@ namespace integrationTest
 
             throw new ArgumentException($"Anti forgery token '{AntiForgeryFieldName}' not found in HTML", nameof(htmlBody));
         }
-        */
     }
 }
 

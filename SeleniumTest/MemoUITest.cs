@@ -10,8 +10,8 @@ namespace SeleniumTest
     public class MemoUITest : IDisposable
     {
         private readonly IWebDriver _driver;
-        private const string _USER_EMAIL = "testacc@gmail.com";
-        private const string _PASSWORD="Testacc1@";
+        private const string _USER_EMAIL = "tikchoong@gmail.com";
+        private const string _PASSWORD="Addiction1@";
         private const string _BASE_URL = "https://localhost:5001";
 
         public MemoUITest()
@@ -49,7 +49,7 @@ namespace SeleniumTest
         {
             Login();    
             Assert.Equal("Index - memo", _driver.Title);
-              
+
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace SeleniumTest
         {
             Login();
             IWebElement acceptCookieButton = _driver.FindElement(By.CssSelector("button.btn.btn-default.navbar-btn"));
-            acceptCookieButton.Click(); 
+            acceptCookieButton.Click();
             Delay();
             IWebElement logoutButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
             logoutButton.Click();

@@ -8,9 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using memo.Data;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Net.Mail;
-using System.Net;
 
+using MailKit.Net.Smtp;
+using MailKit;
+using MimeKit;
 
 namespace memo.Controllers
 {
@@ -30,19 +31,85 @@ namespace memo.Controllers
 
         }
 
+
+        public async Task<IActionResult> Remind(int? id)
+        {
+
+        if (id == null)
+            {
+                return NotFound();
+            }
+
+            var memo = await _context.Memo
+                .FirstOrDefaultAsync(m => m.memoId == id);
+            if (memo == null)
+            {   
+                return NotFound();
+            }
+
+            var email = _userManager.GetUserName(User);
+            
+            //instantiate mimemessage
+            var message = new MimeMessage();
+            //From Address
+            message.From.Add(new MailboxAddress("Memo Application", "mailmemodp1@gmail.com"));
+            //To Address
+            message.To.Add(new MailboxAddress("Memo Application", email));
+            //Subject
+            message.Subject = "This is a reminder from Memo Application";
+            //Body
+            string title = memo.Title;
+            string details = memo.Details;
+            DateTime date = memo.Date;
+
+            message.Body = new TextPart("plain")
+            {
+                Text = "Please check your memo for further details." + "\n" + "Title: " 
+                + title + "\n"+ "Details: " + details + "\n" + "Due On: " + date + "\n"
+
+
+            };
+            
+
+            //configure and send mail
+            using (var client=new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("mailmemodp1@gmail.com", "Pa55w.rd");
+                client.Send(message);
+                client.Disconnect(true);
+            }
+
+            return View();
+
+        }
+
         // GET: Memos
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //return View(await _context.Memo.ToListAsync());
             if (_signInManager.IsSignedIn(User))
             {
                 var id = _userManager.GetUserId(User);
-                return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
+                //return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
+
+                var dataTask = _context.Memo
+                    .OrderBy(m => m.Date)
+                    .Where(m => m.OwnerId == id)
+                    .ToListAsync();
+
+         
+
+                var results = await dataTask;
+              
+                return View(results);
+
+
             }
             return View(null);
 
         }
-        
+
         // GET: Memos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -99,6 +166,8 @@ namespace memo.Controllers
             }
             return View(memo);
         }
+
+
 
         // POST: Memos/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -163,8 +232,7 @@ namespace memo.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        
-      
+
         private bool MemoExists(int id)
         {
             return _context.Memo.Any(e => e.memoId == id);

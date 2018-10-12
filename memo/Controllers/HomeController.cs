@@ -21,7 +21,7 @@ namespace memo.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-
+        
         public IActionResult Index()
         {
             if (_signInManager.IsSignedIn(User))
@@ -35,7 +35,8 @@ namespace memo.Controllers
             }
             
         }
-
+        
+        
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
