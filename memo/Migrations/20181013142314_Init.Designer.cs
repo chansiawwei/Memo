@@ -7,31 +7,37 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using memo.Data;
 
-namespace memo.Data.Migrations
+namespace memo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180919145752_memoadd")]
-    partial class memoadd
+    [Migration("20181013142314_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("memo.Models.Memo", b =>
                 {
-                    b.Property<int>("MemoId")
+                    b.Property<int>("memoId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Message");
+                    b.Property<DateTime>("Date");
 
-                    b.Property<int>("OwnerId");
+                    b.Property<string>("Details")
+                        .IsRequired();
 
-                    b.HasKey("MemoId");
+                    b.Property<string>("OwnerId");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("memoId");
 
                     b.ToTable("Memo");
                 });

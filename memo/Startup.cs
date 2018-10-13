@@ -56,7 +56,6 @@ namespace memo
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-               
             }
             else
             {
@@ -77,30 +76,6 @@ namespace memo
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-          
         }
-        /*
-        private static void AddTestData(ApplicationDbContext context)
-        {
-            context.Memo.Add(new memo.Models.Memo
-            {
-                Title = "Seed Data 1",
-                Details = "This is Seed Data 1",
-                Date = DateTime.Now
-
-            });
-
-            context.Memo.Add(new memo.Models.Memo
-            {
-                Title = "Seed Data 2",
-                Details = "This is Seed Data 2",
-                Date = DateTime.Now
-
-            });
-
-            context.SaveChanges();
-        }
-        */
     }
 }

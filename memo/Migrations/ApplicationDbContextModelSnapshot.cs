@@ -38,19 +38,6 @@ namespace memo.Migrations
                     b.HasKey("memoId");
 
                     b.ToTable("Memo");
-
-                    b.HasData(
-                        new { memoId = 2000, Date = new DateTime(2018, 10, 11, 5, 46, 21, 283, DateTimeKind.Local), Details = "Details 0", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 0" },
-                        new { memoId = 2001, Date = new DateTime(2018, 10, 11, 6, 46, 21, 285, DateTimeKind.Local), Details = "Details 1", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 1" },
-                        new { memoId = 2002, Date = new DateTime(2018, 10, 11, 7, 46, 21, 285, DateTimeKind.Local), Details = "Details 2", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 2" },
-                        new { memoId = 2003, Date = new DateTime(2018, 10, 11, 8, 46, 21, 285, DateTimeKind.Local), Details = "Details 3", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 3" },
-                        new { memoId = 2004, Date = new DateTime(2018, 10, 11, 9, 46, 21, 285, DateTimeKind.Local), Details = "Details 4", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 4" },
-                        new { memoId = 2005, Date = new DateTime(2018, 10, 11, 10, 46, 21, 285, DateTimeKind.Local), Details = "Details 5", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 5" },
-                        new { memoId = 2006, Date = new DateTime(2018, 10, 11, 11, 46, 21, 285, DateTimeKind.Local), Details = "Details 6", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 6" },
-                        new { memoId = 2007, Date = new DateTime(2018, 10, 11, 12, 46, 21, 285, DateTimeKind.Local), Details = "Details 7", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 7" },
-                        new { memoId = 2008, Date = new DateTime(2018, 10, 11, 13, 46, 21, 285, DateTimeKind.Local), Details = "Details 8", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 8" },
-                        new { memoId = 2009, Date = new DateTime(2018, 10, 11, 14, 46, 21, 285, DateTimeKind.Local), Details = "Details 9", OwnerId = "2eeff8de-6716-4c8a-81ae-8140a02957ab", Title = "Memo 9" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

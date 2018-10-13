@@ -10,8 +10,8 @@ namespace SeleniumTest
     public class MemoUITest : IDisposable
     {
         private readonly IWebDriver _driver;
-        private const string _USER_EMAIL = "tikchoong@gmail.com";
-        private const string _PASSWORD="Addiction1@";
+        private const string _USER_EMAIL = "testacc@gmail.com";
+        private const string _PASSWORD="Testacc1@";
         private const string _BASE_URL = "https://localhost:5001";
 
         public MemoUITest()

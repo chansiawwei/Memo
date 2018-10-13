@@ -11,11 +11,10 @@ namespace memo.Models
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-
         public int memoId { get; set; }
 
         public string OwnerId { get; set; } //this field is used to tie to the login user
-        
+
         [Required(ErrorMessage = "Please enter date and time")]
         public DateTime Date { get; set; }
 

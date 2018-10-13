@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace memo.Controllers
 {
     public class HomeController : Controller
@@ -21,7 +22,7 @@ namespace memo.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-        
+
         public IActionResult Index()
         {
             if (_signInManager.IsSignedIn(User))
@@ -35,8 +36,7 @@ namespace memo.Controllers
             }
             
         }
-        
-        
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

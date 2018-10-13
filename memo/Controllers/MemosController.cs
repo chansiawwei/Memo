@@ -9,9 +9,6 @@ using memo.Data;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
 
-using MailKit.Net.Smtp;
-using MailKit;
-using MimeKit;
 
 namespace memo.Controllers
 {
@@ -35,7 +32,7 @@ namespace memo.Controllers
         public async Task<IActionResult> Remind(int? id)
         {
 
-        if (id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -43,73 +40,64 @@ namespace memo.Controllers
             var memo = await _context.Memo
                 .FirstOrDefaultAsync(m => m.memoId == id);
             if (memo == null)
-            {   
+            {
                 return NotFound();
             }
 
-            var email = _userManager.GetUserName(User);
-            
-            //instantiate mimemessage
-            var message = new MimeMessage();
-            //From Address
-            message.From.Add(new MailboxAddress("Memo Application", "mailmemodp1@gmail.com"));
-            //To Address
-            message.To.Add(new MailboxAddress("Memo Application", email));
-            //Subject
-            message.Subject = "This is a reminder from Memo Application";
-            //Body
-            string title = memo.Title;
-            string details = memo.Details;
-            DateTime date = memo.Date;
-
-            message.Body = new TextPart("plain")
-            {
-                Text = "Please check your memo for further details." + "\n" + "Title: " 
-                + title + "\n"+ "Details: " + details + "\n" + "Due On: " + date + "\n"
-
-
-            };
-            
-
-            //configure and send mail
-            using (var client=new SmtpClient())
-            {
-                client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("mailmemodp1@gmail.com", "Pa55w.rd");
-                client.Send(message);
-                client.Disconnect(true);
-            }
-
-            return View();
+            return Content("Eail me the reminder");
 
         }
 
         // GET: Memos
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(int id=1,int type=0 )
         {
             //return View(await _context.Memo.ToListAsync());
+            Console.WriteLine("Memo Index Type {0}", type);
             if (_signInManager.IsSignedIn(User))
             {
-                var id = _userManager.GetUserId(User);
+                var userId = _userManager.GetUserId(User);
                 //return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
+                int size = 5;
+                int skip = (id - 1) * size;
+                var countTask = _context.Memo
+                  .Where(m => m.OwnerId == userId)
+                  .CountAsync();
 
-                var dataTask = _context.Memo
+
+                var count = await countTask;
+
+                ViewData["Page"] = id; //pass the curent page to view
+                ViewData["Count"] = count; //pass the count to view
+                ViewData["Type"] = type;
+                if (type == 0) {
+                var dataTask =  _context.Memo
                     .OrderBy(m => m.Date)
-                    .Where(m => m.OwnerId == id)
+                    .Where(m => m.OwnerId == userId)
+                    .Skip(skip)
+                    .Take(size)
                     .ToListAsync();
+                    var results = await dataTask;
+                    return View(results);
 
-         
+                }
+                else
+                {
+                    var dataTask = _context.Memo
+                 .OrderByDescending(m => m.Date)
+                 .Where(m => m.OwnerId == userId)
+                 .Skip(skip)
+                 .Take(size)
+                 .ToListAsync();
+                    var results = await dataTask;
+                    return View(results);
 
-                var results = await dataTask;
-              
-                return View(results);
-
-
+                }
             }
             return View(null);
 
         }
-
+        
         // GET: Memos/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -1,16 +1,40 @@
 ﻿@model IEnumerable<memo.Models.Memo>
 
+
 @{
     ViewData["Title"] = "Index";
+    string countStr = ViewData["Count"].ToString();
+    int count;
+    int.TryParse(countStr, out count);
+    int page;
+    string pageStr = ViewData["Page"].ToString();
+    int.TryParse(countStr, out page);
+   
+
+
+    int size = 5;
+    var totalPages = (int)Math.Ceiling(Decimal.Divide(count, size));
+    //var firstPage = 1;
+    //var lastPage = totalPages;
+    //var prevPage = Math.Max(page - 1, firstPage);
+    //var nextPage = Math.Min(page + 1, lastPage);
 }
 
 <h2>Index</h2>
-@if (Model==null)
+<h4>Current Page:@pageStr/@totalPages.ToString()</h4>
+<br />
+<hr />
+Sort Order:
+<a asp-controller="Memos" asp-action="Index" asp-route-id=@pageStr asp-route-type="0">Older Data First</a>
+&nbsp;|&nbsp;
+<a asp-controller="Memos" asp-action="Index" asp-route-id=@pageStr asp-route-type="1">Newer Data First</a>
+
+@if (Model == null)
 {
     <p>Please Login or Register to see list of memos.</p>
 }
 else
-{ 
+{
     <p>
         <a asp-action="Create">Create New</a>
     </p>
@@ -18,7 +42,7 @@ else
         <thead>
             <tr>
                 <th>
-                   @Html.DisplayNameFor(model => model.Date)
+                    @Html.DisplayNameFor(model => model.Date)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Title)
@@ -30,25 +54,39 @@ else
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    <b>@Html.DisplayFor(modelItem => item.Title)</b>
-                </td>
-                <td>
-                    <pre> @Html.DisplayFor(modelItem => item.Details)</pre>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.memoId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.memoId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.memoId">Delete</a> |
-                    <a asp-action="Remind" asp-route-id="@item.memoId">Remind Me</a>
-                </td>
-            </tr>
-        }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        <b>@Html.DisplayFor(modelItem => item.Title)</b>
+                    </td>
+                    <td>
+                        <pre> @Html.DisplayFor(modelItem => item.Details)</pre>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.memoId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.memoId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.memoId">Delete</a> |
+                        <a asp-action="Remind" asp-route-id="@item.memoId">Remind Me</a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
+    <div class="linkwrapper">
+        <div class="linkContent">
+            <ul class="pagelink">
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="pagelist"><a class="linkpage" asp-controller="Memos" asp-action="Index" asp-route-type=@ViewData["Type"] asp-route-id=@i>@i</a></li>
+                }
+
+            </ul>
+        </div>
+    </div>
+
 }
