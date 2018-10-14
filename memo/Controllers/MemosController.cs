@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using memo.Data;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
+using MailKit.Net.Smtp;
+using MailKit;
+using MimeKit;
 
 
 namespace memo.Controllers
@@ -44,12 +47,45 @@ namespace memo.Controllers
                 return NotFound();
             }
 
-            return Content("Eail me the reminder");
+            var email = _userManager.GetUserName(User);
+
+            //instantiate mimemessage
+            var message = new MimeMessage();
+            //From Address
+            message.From.Add(new MailboxAddress("Memo Application", "mailmemodp1@gmail.com"));
+            //To Address
+            message.To.Add(new MailboxAddress("Memo Application", email));
+            //Subject
+            message.Subject = "This is a reminder from Memo Application";
+            //Body
+            string title = memo.Title;
+            string details = memo.Details;
+            DateTime date = memo.Date;
+
+            message.Body = new TextPart("plain")
+            {
+                Text = "Please check your memo for further details." + "\n" + "Title: "
+                + title + "\n" + "Details: " + details + "\n" + "Due On: " + date + "\n"
+
+
+            };
+
+
+            //configure and send mail
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("mailmemodp1@gmail.com", "Pa55w.rd");
+                client.Send(message);
+                client.Disconnect(true);
+            }
+
+            return View();
 
         }
 
         // GET: Memos
-        
+
         public async Task<IActionResult> Index(int id=1,int type=0 )
         {
             //return View(await _context.Memo.ToListAsync());

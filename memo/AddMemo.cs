@@ -24,7 +24,7 @@ namespace memo
                 int start = 300;
                 memo = new Memo
                 {
-                    OwnerId = "3df42071-7b2a-40a6-907f-30bff683e2d2",
+                    OwnerId = "610db5c9-8f9f-4902-bbfd-135477e7a76b",
                     Date = DateTime.Now.AddHours(i + 5),
                     Title = String.Format("Memo {0}", i + start),
                     Details = String.Format("Details {0}", i + start)
